@@ -1,0 +1,29 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+<h1>All loaned books</h1>
+{% if perms.catalog.can_mark_returned %}
+    <!-- We can mark a BookInstance as returned. -->
+    <!-- Perhaps add code to link to a "book return" view here. -->
+    {% if bookinstance_list %}
+    <ul>
+        {% for bookinst in bookinstance_list %}
+        <li {% if bookinst.is_overdue %}class="text-danger"{% endif %}>
+            <a href="{% url 'book-detail' bookinst.book.pk %}">
+                {{bookinst.book}}
+            </a> | Due back: {{bookinst.due_back}} | Borrower: {{bookinst.borrower}}
+                {% if perms.catalog.can_mark_returned %}- 
+                <a href="{% url 'renew-book-librarian' bookinst.id %}">
+                    Renew
+                </a>  
+                {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% else %}
+<p>You don't have permissions for this page </p>
+{% endif %}
+
+{% endblock  %}

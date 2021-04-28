@@ -1,0 +1,28 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+    <h1>Authors</h1>
+
+    {% if authors_list %}
+    <ul>
+
+        {% for item in authors_list %}
+
+        <li><a href="{{item.get_absolute_url}}">{{item.first_name}} {{item.last_name}}</a>
+            {% if perms.catalog.can_mark_returned %}
+                 -
+                <a href="{% url 'author_delete' item.pk %}">Delete</a>
+                 -
+                <a href="{% url 'author_update' item.pk %}">Edit</a>
+            {% endif %}
+        </li>
+
+        {% endfor %}
+
+    </ul>
+    {% endif %}
+
+    
+
+{% endblock %}

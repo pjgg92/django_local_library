@@ -1,0 +1,29 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+    <h1>Book List</h1>
+
+    {% if book_list %}
+    <ul>
+        {% for item in book_list %}
+            <li>
+                <a href="{{item.get_absolute_url}}">
+                    {{ item }}
+                        </a> {{ item.author }}
+                        {% if perms.catalog.can_mark_returned %}
+                        -
+                        <a href="{% url 'book_delete' item.pk %}">Delete</a>
+                        -
+                        <a href="{% url 'book_update' item.pk %}">Edit</a>
+            {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% else %}
+    <p>No existen libros en la biblioteca.</p>
+    {% endif %}
+
+
+{% endblock %}

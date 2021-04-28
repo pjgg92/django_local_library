@@ -1,0 +1,35 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+<h1>Title: {{book.title}}</h1>
+
+<p>Author: <a href="{% url 'author-detail' book.author.pk %}"><strong>{{book.author}}</strong></p></a>
+<p>Genre: <strong>{{book.display_genre}}</strong></p>
+<p>Language: <strong>{{book.language}}</strong></p>
+<p>ISBN: <strong>{{book.isbn}}</strong></p>
+<p><strong>Summary:</strong><br>{{book.summary}}</p>
+<div style="margin-left: 2rem; margin-top:2rem;">
+    {% if book.bookinstance_set.all %}
+    <h3>Copies</h3>
+            {% for item in book.bookinstance_set.all %}
+                <hr>
+                <div>
+                    <p class="
+                    {% if item.status == 'a' %} text-success
+                    {% elif item.status == 'm' %} text-warning
+                    {% elif item.status == 'o' %} text-danger
+                    {% elif item.status == 'r' %} text-danger
+                    {% endif %}
+                    ">{{item.get_status_display}}
+                    </p>
+                    <p><strong>ID: </strong>{{item.id}}</p>
+                    {% if item.status != 'a' %}
+                        <p><strong>Available from:</strong> {{item.due_back}}</p>
+                    {% endif%}
+                </div>
+            {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock content %}
